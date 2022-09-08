@@ -1,0 +1,10 @@
+FROM python:3.9.5-buster AS chiron
+
+#
+# Multistage -- add python into nginx
+#
+
+FROM nginx:latest
+
+# adds python3.8 into the nginx container (use 3.8 for pyarrow prebuilt binary wheel)
+COPY --from=0 /usr/local /usr/local

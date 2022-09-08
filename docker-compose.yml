@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  pgdb:
+    image: postgres:14.4
+    platform: linux/amd64
+    container_name: myapp-pgdb
+    ports:
+      - 5432:5432
+    env_file:
+      - .env-docker
+    volumes:
+      # - pgdb:/var/lib/postgresql/data:rw
+      - ./dump:/dump
+    restart: always
+
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile.new
+      args:
+        REQ: prod
+        IMAGE: $IMAGE
+    container_name: web
+    restart: always
+    env_file:
+      - .env-docker   #  .env changed automatically
+    depends_on:
+      - pgdb
+    links:
+      - pgdb
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+
+volumes:   # to reuse a volume across multiple services, a named volume MUST be declared
+  pgdb:
+    driver: local

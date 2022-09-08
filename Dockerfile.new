@@ -1,0 +1,15 @@
+ARG IMAGE
+FROM --platform=linux/amd64 ${IMAGE}
+
+ARG REQ
+ENV REQ=$REQ
+
+COPY ./ /app/
+RUN echo $REQ
+RUN pip install -r requirements/${REQ}.txt
+
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
+
+EXPOSE 8000
+
+CMD gunicorn django_docker_ex.wsgi --workers=1 --bind=0.0.0.0:8000 --reload
