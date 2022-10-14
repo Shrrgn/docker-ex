@@ -18,14 +18,16 @@
 
 commands:
 ```bash
+# shows detailed output
 DOCKER_BUILDKIT=0 docker build -t dev-ui:0.2 .
-
+# run a specific command and get result immediately (in the current case ls)
 docker run --rm -it bbed3e5062ce ls -alh
-
+# shows history of changes
 docker history docker-ex:0.1
-
+# go into container (web is a name of a container in docker-compose)
+# if you use just docker it should be changed to container id
 docker exec -it web sh
-
+# delete everything (images, containers)
 docker system prune -a
 ```
 
